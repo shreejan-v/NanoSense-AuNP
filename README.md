@@ -72,6 +72,7 @@ Aggregation readout: **A620 / A520**, the absorbance ratio used in experimental 
 ```
 NanoSense-AuNP/
 ├── nanosense.py          # all models + the four virtual experiments
+├── extended_analysis.py  # dielectric check, absorption vs scattering, sensitivity vs size, gold per test
 ├── figures/
 │   ├── fig1_size_spectra.png     # Mie spectra, 10–100 nm
 │   ├── fig2_binding_shift.png    # LSPR shift vs protein-shell thickness
