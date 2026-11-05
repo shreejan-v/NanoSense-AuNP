@@ -83,16 +83,16 @@ def ratio(y):                                            # standard aggregation 
 
 rows = []
 # 1. size dependence
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(4.5, 3))
 for d in [10, 20, 40, 60, 80, 100]:
     qe = mie_qext(d, WL)
     rows.append(["size", d, round(peak(qe), 1), round(qe.max(), 3), ""])
     plt.plot(WL, qe / qe.max(), label=f"{d} nm")
 plt.xlabel("Wavelength (nm)"); plt.ylabel("Normalised extinction"); plt.title("Mie extinction of AuNPs in water")
-plt.legend(); plt.tight_layout(); plt.savefig("figures/fig1_size_spectra.png", dpi=200); plt.close()
+plt.legend(); plt.tight_layout(); plt.savefig("figures/fig1_size_spectra.png", dpi=300); plt.close()
 
 # 2. binding sensing (protein shell growth)
-plt.figure(figsize=(6, 4)); shifts = []
+plt.figure(figsize=(4.5, 3)); shifts = []
 base = peak(coated_cext(20, 0, WL))
 for t in [0, 1, 2, 4, 6, 8, 10]:
     c = coated_cext(20, t, WL)
@@ -101,7 +101,7 @@ for t in [0, 1, 2, 4, 6, 8, 10]:
     plt.plot(WL, c, label=f"shell {t} nm")
 plt.xlim(450, 650); plt.xlabel("Wavelength (nm)"); plt.ylabel("C_ext (nm$^2$)")
 plt.title("20 nm AuNP: LSPR shift on biomolecule binding"); plt.legend(fontsize=8); plt.tight_layout()
-plt.savefig("figures/fig2_binding_shift.png", dpi=200); plt.close()
+plt.savefig("figures/fig2_binding_shift.png", dpi=300); plt.close()
 
 # 3. bulk refractive-index sensitivity
 ns = np.array([1.333, 1.35, 1.37, 1.39, 1.41])
@@ -109,20 +109,20 @@ pk = np.array([peak(mie_qext(20, WL, n)) for n in ns])
 S = np.polyfit(ns, pk, 1)[0]
 for n, p in zip(ns, pk):
     rows.append(["RI", n, round(p, 1), "", ""])
-plt.figure(figsize=(5, 4)); plt.plot(ns, pk, "o-")
+plt.figure(figsize=(3.75, 3)); plt.plot(ns, pk, "o-")
 plt.xlabel("Medium refractive index"); plt.ylabel("LSPR peak (nm)")
-plt.title(f"Sensitivity = {S:.0f} nm/RIU"); plt.tight_layout(); plt.savefig("figures/fig3_ri_sensitivity.png", dpi=200); plt.close()
+plt.title(f"Sensitivity = {S:.0f} nm/RIU"); plt.tight_layout(); plt.savefig("figures/fig3_ri_sensitivity.png", dpi=300); plt.close()
 
 # 4. aggregation colorimetric readout: clusters of 20 nm AuNPs (fill 0.4) growing in size, Mie of effective sphere
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(4.5, 3))
 for D in [20, 60, 100, 150, 200]:
     c = mie_qext(D, WL) if D == 20 else mie_qext(D, WL, eps_fn=eps_mg(0.4))
     nparts = round(0.4 * (D / 20) ** 3) if D > 20 else 1
     rows.append(["aggregation", D, round(peak(c), 1), nparts, round(ratio(c), 3)])
     plt.plot(WL, c / c.max(), label=f"cluster {D} nm (~{nparts} NPs)")
 plt.xlabel("Wavelength (nm)"); plt.ylabel("Normalised extinction")
-plt.title("Aggregation-induced red-shift (red -> blue/purple)"); plt.legend(fontsize=8); plt.tight_layout()
-plt.savefig("figures/fig4_aggregation.png", dpi=200); plt.close()
+plt.title("Aggregation-induced red-shift (red -> blue/purple)", fontsize=10); plt.ylim(0, 1.45); plt.legend(fontsize=7, ncol=2, loc="upper center"); plt.tight_layout()
+plt.savefig("figures/fig4_aggregation.png", dpi=300); plt.close()
 
 with open("results/results.csv", "w", newline="") as fh:
     w = csv.writer(fh); w.writerow(["experiment", "parameter", "peak_nm", "max_Qext_or_NPs", "shift_or_A620/A520"]); w.writerows(rows)
